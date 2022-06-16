@@ -5,11 +5,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { promisify } from 'node:util';
+import { GqlExecutionContext } from '@nestjs/graphql';
 import { expressjwt as jwt } from 'express-jwt';
 import { expressJwtSecret } from 'jwks-rsa';
+import { promisify } from 'node:util';
 
-@Injectable()
+@Injectable() // Significa que o Nest vai fazer injeção de dependência nessa classe
 export class AuthorizationGuard implements CanActivate {
   private AUTH0_AUDIENCE: string;
   private AUTH0_DOMAIN: string;
@@ -19,14 +20,13 @@ export class AuthorizationGuard implements CanActivate {
     this.AUTH0_DOMAIN = this.configService.get('AUTH0_DOMAIN') ?? '';
   }
 
-  async canActivate(context: ExecutionContext) {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const httpContext = context.switchToHttp();
 
     const req = httpContext.getRequest();
     const res = httpContext.getResponse();
-    // console.log(res);
 
-    const checkJwt = promisify(
+    const checkJWT = promisify(
       jwt({
         secret: expressJwtSecret({
           cache: true,
@@ -41,12 +41,13 @@ export class AuthorizationGuard implements CanActivate {
     );
 
     try {
-      await checkJwt(req, res);
+      await checkJWT(req, res);
 
       return true;
     } catch (error) {
-      console.log(error);
       throw new UnauthorizedException(error);
     }
+
+    return true;
   }
 }
