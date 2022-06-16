@@ -24,6 +24,7 @@ export class AuthorizationGuard implements CanActivate {
 
     const req = httpContext.getRequest();
     const res = httpContext.getResponse();
+    // console.log(res);
 
     const checkJwt = promisify(
       jwt({
@@ -44,6 +45,7 @@ export class AuthorizationGuard implements CanActivate {
 
       return true;
     } catch (error) {
+      console.log(error);
       throw new UnauthorizedException(error);
     }
   }
