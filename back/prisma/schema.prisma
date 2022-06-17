@@ -17,15 +17,14 @@ model Task {
   status    Boolean   @default(false)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-
 }
 
 model SubTask {
-  id         String   @id() @default(uuid())
-  name       String
-  status     Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  Task       Task?    @relation(fields: [mainTaskId], references: [id])
-  mainTaskId String?
+  id        String   @id() @default(uuid())
+  name      String
+  status    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  taskId    String?
+  Task      Task?    @relation(fields: [taskId], references: [id])
 }

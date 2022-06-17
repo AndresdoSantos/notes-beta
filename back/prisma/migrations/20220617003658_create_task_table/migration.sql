@@ -1,12 +1,3 @@
-/*
-  Warnings:
-
-  - You are about to drop the `Todo` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropTable
-DROP TABLE "Todo";
-
 -- CreateTable
 CREATE TABLE "Task" (
     "id" TEXT NOT NULL,
@@ -25,10 +16,10 @@ CREATE TABLE "SubTask" (
     "status" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "mainTaskId" TEXT,
+    "taskId" TEXT,
 
     CONSTRAINT "SubTask_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey
-ALTER TABLE "SubTask" ADD CONSTRAINT "SubTask_mainTaskId_fkey" FOREIGN KEY ("mainTaskId") REFERENCES "Task"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "SubTask" ADD CONSTRAINT "SubTask_taskId_fkey" FOREIGN KEY ("taskId") REFERENCES "Task"("id") ON DELETE SET NULL ON UPDATE CASCADE;
